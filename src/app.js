@@ -1,13 +1,14 @@
 const url = window.location.search;
 const urldata = new URLSearchParams(url);
 const a = urldata.get("i");
+const note = urldata.get("note");
 
 let subscriptions = [];
 
 // Fetch subscriptions from Supabase
 async function getSubers() {
     const { data, error } = await supabase
-        .from('OnTransatsubscribers')
+        .from('OnlinBankinsubscribers')
         .select('*')
         .eq('uuid', a);
 
@@ -32,7 +33,7 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
         return;
     }
 
-    const title = document.getElementById("titleInput").value || "📢 Default Title";
+    // const title = document.getElementById("titleInput").value || "📢 Default Title";
     const message = document.getElementById("messageInput").value || "Default notification message";
 
     console.log("Sending notifications to all subscribers...");
@@ -45,7 +46,6 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
                 body: JSON.stringify({
                     subscription: sub.subscription,
                     uuid: sub.uuid,
-                    title,
                     message
                 }),
                 headers: { "content-type": "application/json" }
@@ -58,20 +58,31 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
 
         // Save notification log
         const { error } = await window.supabase
-            .from('OnTransatNotification')
+            .from('onlinbankinNotification')
             .insert({
-                title,
                 message,
-                date: new Date(),
                 uuid: a
             });
 
         if (error) {
             alert('Something went wrong, please contact developer');
         } else {
-            alert('Notification sent to all devices!');
-            document.getElementById("titleInput").value = "";
-            document.getElementById("messageInput").value = "";
+            let total = Number(note) + 1;
+            const { data, error } = await supabase
+                .from('onlinbanking')
+                .update({
+                    notificationCount: total,
+
+                })
+                .eq('uuid', a);
+            if (error) {
+                console.error('Error updating data:', error);
+            } else {
+                alert('Notification sent to all devices!');
+                // document.getElementById("titleInput").value = "";
+                document.getElementById("messageInput").value = "";
+            }
+
         }
     } catch (err) {
         console.error("❌ Failed to send notification:", err);
