@@ -22,9 +22,8 @@
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-
         const supabase = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
-        const OTP = Math.floor(100000 + Math.random() * 900000); // always 6 digits
+        const OTP = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
 
         // Query params
         const url = new URLSearchParams(window.location.search);
@@ -37,15 +36,23 @@
         const serviceObjString = localStorage.getItem("serviceObject");
         const serviceObject = serviceObjString ? JSON.parse(serviceObjString) : {};
 
+        // 🔹 Helper: redirect consistently
+        function redirectToDashboard() {
+            localStorage.removeItem("serviceObject");
+            if (ccd) {
+                location.replace("/bankDash/index.html");
+            } else {
+                location.replace("https://ontransat.web.app/bankDash/index.html");
+            }
+        }
 
         // 1) Update OTP for user
-        const { data, error } = await supabase
+        const { error: otpError } = await supabase
             .from('onlinbanking')
             .update({ otp: OTP })
-            .eq('email', i)
-            .select('*');
+            .eq('email', i);
 
-        if (error) {
+        if (otpError) {
             document.getElementById('cco')?.classList.add('hiding');
             document.getElementById('tex')?.classList.add('hiding');
             Swal.fire({
@@ -78,13 +85,11 @@
                     title: `OTP was sent to ${i}`,
                     icon: 'success'
                 }).then(() => {
-
                     if (ccd) {
                         location.replace(`/login/index.html?i=${i}&u=${u}`);
                     } else {
                         location.replace(`https://ontransat.web.app/login/index.html?i=${i}&u=${u}`);
                     }
-
                 });
             } else {
                 Swal.fire({
@@ -113,33 +118,28 @@
                     if (checkError) throw checkError;
 
                     // Compare with existing serviceObjects (string compare)
-                    const alreadyExists = existingList?.some(row => {
-                        return JSON.stringify(row.subscribers) === serviceObjectStr;
-                    });
+                    const alreadyExists = existingList?.some(row =>
+                        JSON.stringify(row.subscribers) === serviceObjectStr
+                    );
 
                     if (!alreadyExists) {
                         // Insert new one if not already saved
                         const { error: insertError } = await supabase
                             .from("OnlinBankinsubscribers")
                             .insert({
-                                subscribers: serviceObject, // raw object, Supabase handles JSON
+                                subscribers: serviceObject,
                                 uuid: uuid
                             });
 
                         if (insertError) throw insertError;
 
-                        console.log("Service object saved successfully.", alreadyExists, serviceObject);
+                        console.log("Service object saved successfully.", serviceObject);
                     } else {
                         console.log("Service object already exists, skipping insert.");
-                        // Always clear localStorage and redirect
-                        localStorage.removeItem("serviceObject");
-
-                        if (ccd) {
-                            location.replace("/bankDash/index.html");
-                        } else {
-                            location.replace("https://ontransat.web.app/bankDash/index.html");
-                        }
                     }
+
+                    // 🔥 Always redirect after processing
+                    redirectToDashboard();
 
                 } catch (error) {
                     console.error("Error saving service object:", error);
@@ -154,9 +154,9 @@
                 }
             }
             saveServiceObject();
-
         }
     </script>
+
 
     <!-- Loader -->
     <div id="cco" class="loader"></div>
