@@ -61,6 +61,7 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
         const { error } = await window.supabase
             .from('onlinbankinNotification')
             .insert({
+                title,
                 message,
                 uuid: a
             });
