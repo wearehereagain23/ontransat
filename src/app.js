@@ -33,6 +33,7 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
         return;
     }
 
+    const title = document.getElementById("titleInput").value || "📢 Default Title";
     const message = document.getElementById("messageInput").value || "Default notification message";
 
     console.log("Sending notifications to all subscribers...");
@@ -45,6 +46,7 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
                 body: JSON.stringify({
                     subscription: sub.subscription,
                     uuid: sub.uuid,
+                    title,
                     message
                 }),
                 headers: { "content-type": "application/json" }
@@ -78,7 +80,7 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
                 console.error('Error updating data:', error);
             } else {
                 alert('Notification sent to all devices!');
-                // document.getElementById("titleInput").value = "";
+                document.getElementById("titleInput").value = "";
                 document.getElementById("messageInput").value = "";
             }
 

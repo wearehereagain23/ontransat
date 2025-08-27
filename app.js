@@ -71,10 +71,11 @@ app.get('/manifest.json', (req, res) => {
 // Subscribe route: send notification
 // Subscribe route: send notification
 app.post("/subscribe", async (req, res) => {
-    const { subscription, uuid, message } = req.body;
+    const { subscription, uuid, title, message } = req.body;
 
     try {
         await webpush.sendNotification(subscription, JSON.stringify({
+            title,
             body: message
         }));
 

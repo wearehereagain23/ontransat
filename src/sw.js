@@ -17,6 +17,8 @@ self.addEventListener("install", (event) => {
     self.skipWaiting();
 });
 
+
+
 self.addEventListener("activate", (event) => {
     event.waitUntil(
         (async () => {
@@ -49,9 +51,10 @@ self.addEventListener("push", (event) => {
     try {
         data = event.data.json(); // Expect JSON payload
     } catch (e) {
-        data = { body: event.data.text() };
+        data = { title: "📢 New Notification", body: event.data.text() };
     }
 
+    const title = data.title || "📢 Default Title";
     const options = {
         body: data.body || "This is a default message.",
         icon: data.icon || "/icon-192.png",
@@ -61,7 +64,7 @@ self.addEventListener("push", (event) => {
     };
 
     event.waitUntil(
-        self.registration.showNotification("📢 Notification", options)
+        self.registration.showNotification(title, options)
     );
 });
 
