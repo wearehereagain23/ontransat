@@ -33,7 +33,6 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
         return;
     }
 
-    // const title = document.getElementById("titleInput").value || "📢 Default Title";
     const message = document.getElementById("messageInput").value || "Default notification message";
 
     console.log("Sending notifications to all subscribers...");

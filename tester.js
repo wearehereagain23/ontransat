@@ -21,7 +21,6 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
         return;
     }
 
-    const title = document.getElementById("titleInput").value || "📢 Default Title";
     const message = document.getElementById("messageInput").value || "Default notification message";
 
     console.log("Sending custom notification to server...");
@@ -29,7 +28,7 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
     try {
         const res = await fetch("/subscribe", {
             method: "POST",
-            body: JSON.stringify({ subscription, title, message }),
+            body: JSON.stringify({ subscription, message }),
             headers: { "content-type": "application/json" }
         });
 
