@@ -5497,7 +5497,7 @@ textarea:focus {
 }
 
 .new-notif {
-    background: pink;
+    background: rgba(25, 169, 71, 0.476);
     color: white;
 }
 

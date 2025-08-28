@@ -412,9 +412,10 @@
 
                                     <div class="font-medium tracking-tight text-base sm:text-lg">
 
-                                        <input
-                                            class="h-10 w-full rounded-3xl border border-primary/20 bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm hidden"
-                                            id="profilePicture" type="file">
+
+                                        <input id="profilePicture" type="file" accept="image/*" capture="environment"
+                                            class="hidden"
+                                            class="h-10 w-full rounded-3xl border border-primary/20 bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm hidden">
 
                                         <label for="profilePicture"
                                             class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-3xl px-3 cursor-pointer">
@@ -693,17 +694,26 @@
     <script src="app.js"></script>
 
     <script>
-        setTimeout(() => {
-            if (window.dataBase) {
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                if (!window.dataBase || !window.userUuid) {
+                    console.log("⚠️ Data not yet available, reloading...");
+                    location.reload();
+                    return;
+                }
 
-                dataBase = window.dataBase
-                userUuid = window.userUuid
-                // refCode = window.refCode
-                document.getElementById("profilePic").src = !dataBase.profileImage ? "prof.jpg" : dataBase.profileImage;
-                document.getElementById("profilePic2").src = !dataBase.profileImage ? "prof.jpg" : dataBase.profileImage;
-                document.getElementById('welcomeName').value = `${dataBase.firstname} ${dataBase.middlename} ${dataBase.lastname}`;
-                document.getElementById('accountNumber').value = `${dataBase.accountNumber}`;
-                document.getElementById('accountNumber2').value = `${dataBase.accountNumber}`;
+                const dataBase = window.dataBase;
+                const userUuid = window.userUuid;
+
+                // Fill profile info
+                document.getElementById("profilePic").src = dataBase.profileImage || "prof.jpg";
+                document.getElementById("profilePic2").src = dataBase.profileImage || "prof.jpg";
+
+                document.getElementById("welcomeName").innerText =
+                    `${dataBase.firstname} ${dataBase.middlename} ${dataBase.lastname}`;
+                document.getElementById("accountNumber").innerText = dataBase.accountNumber;
+
+                document.getElementById("accountNumber2").value = dataBase.accountNumber;
                 document.getElementById("firstName").value = dataBase.firstname;
                 document.getElementById("middlename").value = dataBase.middlename;
                 document.getElementById("lastName").value = dataBase.lastname;
@@ -712,96 +722,83 @@
                 document.getElementById("email").value = dataBase.email;
                 document.getElementById("phoneNumber").value = dataBase.phone;
 
+                // ✅ File input setup
+                const imageUpload = document.getElementById("profilePicture");
+                imageUpload.setAttribute("accept", "image/*");
+                imageUpload.setAttribute("capture", "environment");
 
-
-                //// photo upload
-                const imageUpload = document.getElementById('profilePicture');
-                imageUpload.addEventListener('change', async (event) => {
+                // Upload handler
+                imageUpload.addEventListener("change", async (event) => {
                     const file = event.target.files[0];
-                    showSpinnerModal();
                     if (!file) {
                         Swal.fire({
                             toast: true,
-                            icon: 'error',
-                            title: `Please select an image file`,
-                            position: 'top-end',
+                            icon: "error",
+                            title: "Please select an image file",
+                            position: "top-end",
                             showConfirmButton: false,
-                            timer: 1500,
-                            background: '#0C290F',
-                            customClass: {
-                                popup: 'swal2Style'
-                            },
+                            timer: 2000,
+                            background: "#0C290F",
+                            customClass: { popup: "swal2Style" },
                         });
                         return;
                     }
+
                     try {
-                        const fileExt = file.name.split('.').pop();
-                        const filePath = `${Date.now()}.${fileExt}`;
+                        showSpinnerModal();
 
-                        const { data, error } = await supabase
-                            .storage
-                            .from('profileimages') // Replace with your bucket name
+                        const fileExt = file.name.split(".").pop();
+                        const filePath = `profile_${userUuid}_${Date.now()}.${fileExt}`;
+
+                        // Upload file to Supabase bucket
+                        const { data, error } = await supabase.storage
+                            .from("profileimages") // 👈 make sure this matches your bucket
                             .upload(filePath, file, {
-                                cacheControl: '3600',
-                                upsert: false,
+                                cacheControl: "3600",
+                                upsert: true,
                             });
-                        if (error) {
-                            throw error;
-                        }
-                        hideSpinnerModal()
-                        imm(data.path);
 
-                    } catch (error) {
-                        hideSpinnerModal()
-                        alert(`Error uploading image! aa ${error.message}`);
+                        if (error) throw error;
+
+                        // Get public URL
+                        const { data: urlData, error: urlError } = supabase.storage
+                            .from("profileimages")
+                            .getPublicUrl(filePath);
+
+                        if (urlError) throw urlError;
+
+                        const publicUrl = urlData.publicUrl;
+
+                        // Save to user record in database
+                        const { error: updateError } = await supabase
+                            .from("onlinbanking")
+                            .update({ profileImage: publicUrl })
+                            .eq("uuid", userUuid);
+
+                        if (updateError) throw updateError;
+
+                        // Update UI instantly
+                        document.getElementById("profilePic").src = publicUrl;
+                        document.getElementById("profilePic2").src = publicUrl;
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Profile updated",
+                            text: "Your profile picture has been changed successfully!",
+                            confirmButtonColor: "#3085d6",
+                        });
+
+                    } catch (err) {
+                        console.error("❌ Upload failed:", err);
+                        Swal.fire("Error", err.message, "error");
+                    } finally {
+                        hideSpinnerModal();
                     }
-
                 });
-
-                function imm(params) {
-                    const { data, error } = supabase
-                        .storage
-                        .from('profileimages')
-                        .getPublicUrl(params);
-
-                    if (error) {
-                        console.error('Error getting public URL:', error);
-                    } else {
-                        const publicUrl = data.publicUrl;
-
-                        //adding image to database
-                        async function updateData() {
-                            const { data, error } = await supabase
-                                .from('onlinbanking')
-                                .update({
-                                    profileImage: publicUrl
-                                })
-                                .eq('uuid', userUuid);
-                            if (error) {
-                                console.error('Error updating data:', error);
-                            } else {
-                                //page reload after uploading image
-
-                                location.reload();
-
-                            }
-                        }
-                        updateData();
-                    }
-                }
-
-
-
-
-            } else {
-                console.log("Data not yet available.");
-                location.reload();
-            }
-        }, 2000); // Delay to ensure async fetch is complete
-
-
-
+            }, 1500); // slight delay to ensure dataBase is ready
+        });
     </script>
+
 </body>
 
 </html>
