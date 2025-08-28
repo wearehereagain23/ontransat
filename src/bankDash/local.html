@@ -1142,7 +1142,7 @@
                     showSpinnerModal();
                     let id1 = Math.floor(1000 + Math.random() * 908700);
                     const { data, error } = await supabase
-                        .from(''onlinbankinHistory'')
+                        .from('onlinbankinHistory')
                         .insert({
                             amount: amount,
                             date: new Date(),
@@ -1163,7 +1163,7 @@
                         ////// Debiting and crediting
                         let id2 = Math.floor(1000 + Math.random() * 90700);
                         const { data, error } = await supabase
-                            .from(''onlinbankinHistory'')
+                            .from('onlinbankinHistory')
                             .insert({
                                 amount: amount,
                                 date: new Date(),
@@ -1210,7 +1210,7 @@
                                     } else {
                                         /////////
                                         hideSpinnerModal();
-                                        location.href = `https://ontransat.vercel.app/local.html?i=${dataBase.email}&c=${dataBase.currency}&r=${ref}&id=${id1}&id2=${id2}`
+                                        location.href = `https://ontransat.vercel.app/local.html?i=${dataBase.email}&c=${dataBase.currency}&r=${ref}&id=${id1}&id2=${id2}&in=tx`
 
                                     }
 
@@ -1229,7 +1229,7 @@
                                     } else {
                                         /////////
                                         hideSpinnerModal();
-                                        location.href = `https://ontransat.vercel.app/local.html?i=${dataBase.email}&c=${dataBase.currency}&r=${ref}&id=${id1}&id2=${id2}`
+                                        location.href = `https://ontransat.vercel.app/local.html?i=${dataBase.email}&c=${dataBase.currency}&r=${ref}&id=${id1}&id2=${id2}&in=tx`
 
                                     }
                                 } else {
@@ -1247,7 +1247,7 @@
                                     } else {
                                         /////////
                                         hideSpinnerModal();
-                                        location.href = `https://ontransat.vercel.app/local.html?i=${dataBase.email}&c=${dataBase.currency}&r=${ref}&id=${id1}&id2=${id2}`
+                                        location.href = `https://ontransat.vercel.app/local.html?i=${dataBase.email}&c=${dataBase.currency}&r=${ref}&id=${id1}&id2=${id2}&in=tx`
 
                                     }
                                 }

@@ -30,6 +30,7 @@
         const i = urldata.get("i")
         const r = urldata.get("r")
         const c = urldata.get("c")
+        const ccd = url.get("in");
 
 
 
@@ -84,7 +85,12 @@
                     showConfirmButton: true,
                     allowOutsideClick: false,
                 }).then(() => {
-                    location.href = `https://on-flex.web.app/bankDash/international.html`
+                    if (ccd) {
+                        location.replace('bankDash/international.html')
+                    } else {
+                        location.href = `https://on-flex.web.app/bankDash/international.html`
+                    }
+
                 });
             } else {
                 document.getElementById('cco').classList.add('hiding')

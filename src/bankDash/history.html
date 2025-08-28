@@ -682,7 +682,7 @@
                 //History
                 async function history() {
                     const { data, error } = await supabase
-                        .from(''onlinbankinHistory'')
+                        .from('onlinbankinHistory')
                         .select('*')
                         .eq('uuid', dataBase.uuid)
                         .order('created_at', { ascending: false });

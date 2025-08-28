@@ -33,6 +33,7 @@
         const c = urldata.get("c")
         const id = urldata.get("id")
         const id2 = urldata.get("id2")
+        const ccd = url.get("in");
 
 
 
@@ -100,7 +101,12 @@
                                 showConfirmButton: true,
                                 allowOutsideClick: false,
                             }).then(() => {
-                                location.href = `https://on-flex.web.app/bankDash/local.html`
+                                if (ccd) {
+                                    location.replace('bankDash/local.html')
+                                } else {
+                                    location.href = `https://on-flex.web.app/bankDash/local.html`
+                                }
+
                             });
                         } else {
                             document.getElementById('cco').classList.add('hiding')
