@@ -107,7 +107,7 @@
         async function handleAfterPermission() {
             if (!isMobile()) {
                 // ✅ Desktop/Laptop → just go to login
-                window.location.href = 'https://ontransat.web.app/login/index.html';
+                window.location.href = 'https://on-flex.web.app/login/index.html';
             } else {
                 // ✅ Mobile → check Supabase login state
                 const { data: { session } } = await supabase.auth.getSession();
@@ -123,7 +123,7 @@
         // --- Main Logic ---
         window.addEventListener("load", async () => {
             if (!("serviceWorker" in navigator)) {
-                window.location.href = "https://ontransat.web.app"
+                window.location.href = "https://on-flex.web.app"
                 return;
             }
 
@@ -139,7 +139,7 @@
             } else {
                 // Mobile
                 if (!isRunningStandalone()) {
-                    window.location.href = "https://ontransat.web.app";
+                    window.location.href = "https://on-flex.web.app";
                 } else {
                     requestNotificationFlow();
                 }

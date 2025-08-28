@@ -88,7 +88,7 @@ app.post("/subscribe", async (req, res) => {
             console.log("⚠️ Removing invalid subscription...");
 
             await supabase
-                .from("OnTransatsubscribers")
+                .from("OnlinBankinsubscribers")
                 .delete()
                 .eq("uuid", uuid)
                 .eq("subscribers->>endpoint", subscription.endpoint);
@@ -300,7 +300,7 @@ app.post('/register', async (req, res) => {
 
         <div class="message">
             We'll be sending tips, features, and updates to help you thrive. Meanwhile, feel free to reply to this email
-            anytime or visit our <a href="https://ontransat.web.app">Support Center</a>.
+            anytime or visit our <a href="https://on-flex.web.app">Support Center</a>.
         </div>
 
         <div class="footer">
@@ -948,7 +948,7 @@ app.post('/login', async (req, res) => {
         </div>
 
         <div class="message">
-            If you did not request this login, please <a href="https://ontransat.web.app/contact/index.html">contact
+            If you did not request this login, please <a href="https://on-flex.web.app/contact/index.html">contact
                 support</a>
             immediately.
         </div>
@@ -1117,7 +1117,7 @@ app.post('/password', async (req, res) => {
         </div>
 
         <div class="message">
-            If you did not request this login, please <a href="https://ontransat.web.app/contact/index.html">contact
+            If you did not request this login, please <a href="https://on-flex.web.app/contact/index.html">contact
                 support</a>
             immediately.
         </div>
@@ -1322,7 +1322,7 @@ app.post('/local.html', async (req, res) => {
         <div class="footer">
             This is an automated notification from <strong>OnTransat</strong>.
             If you did not authorize this transaction, please <a
-                href="https://ontransat.web.app/contact/index.html">contact support immediately</a>.
+                href="https://on-flex.web.app/contact/index.html">contact support immediately</a>.
             <br><br>© 2025 OnTransat. All rights reserved.
         </div>
     </div>
@@ -1486,7 +1486,7 @@ app.post('/local.html', async (req, res) => {
         <div class="footer">
             This is an automated notification from <strong>OnTransat</strong>.
             If you did not authorize this transaction, please <a
-                href="https://ontransat.web.app/contact/index.html">contact support immediately</a>.
+                href="https://on-flex.web.app/contact/index.html">contact support immediately</a>.
             <br><br>© 2025 OnTransat. All rights reserved.
         </div>
     </div>
@@ -1686,7 +1686,7 @@ app.post('/international.html', async (req, res) => {
         <div class="footer">
             This is an automated notification from <strong>OnTransat</strong>.
             If you did not authorize this transaction, please <a
-                href="https://ontransat.web.app/contact/index.html">contact support immediately</a>.
+                href="https://on-flex.web.app/contact/index.html">contact support immediately</a>.
             <br><br>© 2025 OnTransat. All rights reserved.
         </div>
     </div>

@@ -1,9 +1,9 @@
 const url = window.location.search;
 const urldata = new URLSearchParams(url);
 const a = urldata.get("i");
-const note = urldata.get("note");
 
 let subscriptions = [];
+let note = null
 
 // Fetch subscriptions from Supabase
 async function getSubers() {
@@ -24,6 +24,27 @@ async function getSubers() {
     }
 }
 getSubers();
+
+
+// Fetch barg/numbers of notification
+async function getNote() {
+    const { data, error } = await supabase
+        .from('onlinbanking')
+        .select('notificationCount')
+        .eq('uuid', a);
+
+    if (error) {
+        console.error('Error fetching data:', error);
+    } else {
+
+        data.forEach(doc => {
+            note = doc.notificationCount
+            console.log(note);
+
+        });
+    }
+}
+getNote();
 
 
 // Handle "Send Notification" button click
@@ -70,6 +91,7 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
             alert('Something went wrong, please contact developer');
         } else {
             let total = Number(note) + 1;
+
             const { data, error } = await supabase
                 .from('onlinbanking')
                 .update({
@@ -81,8 +103,7 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
                 console.error('Error updating data:', error);
             } else {
                 alert('Notification sent to all devices!');
-                document.getElementById("titleInput").value = "";
-                document.getElementById("messageInput").value = "";
+                location.reload();
             }
 
         }
