@@ -33,16 +33,13 @@
     <script src="https://unpkg.com/pulltorefreshjs"></script>
     <script>
         PullToRefresh.init({
-            mainElement: 'body',
+            mainElement: '.main', // 👈 instead of body, target the actual scrollable area
             onRefresh() {
-                // Example: hard reload
                 window.location.reload();
-
-                // Or just refresh data dynamically without reload
-                // fetchDataAndUpdateUI();
             }
         });
     </script>
+
 </head>
 
 <body class="__className_528a31">
@@ -291,7 +288,7 @@
             </div>
         </header>
 
-        <div class="pt-[88px] pb-20 md:pl-[82px]">
+        <div class=" pt-[88px] pb-20 md:pl-[82px]">
             <main class="min-h-[calc(100vh-88px-64px)] container mx-auto">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
                     <div>

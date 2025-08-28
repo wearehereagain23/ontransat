@@ -5405,3 +5405,9 @@ textarea:focus {
     /* pink */
     font-weight: bold;
 }
+
+.main {
+    height: calc(100vh - 60px);
+    /* subtract header/footer height */
+    overflow-y: auto;
+}
