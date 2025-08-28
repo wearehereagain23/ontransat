@@ -135,8 +135,15 @@ html {
     -webkit-tap-highlight-color: transparent
 }
 
+
+html,
 body {
+
     margin: 0;
+    overflow-y: auto;
+    /* allow scroll */
+    -webkit-overflow-scrolling: touch;
+    /* momentum scrolling on iOS */
     line-height: inherit
 }
 
