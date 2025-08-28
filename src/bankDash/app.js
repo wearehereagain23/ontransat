@@ -6,6 +6,19 @@ function hideSpinnerModal() {
   document.getElementById('spinnerModal').style.display = 'none';
 }
 
+// Reload when user returns to the PWA
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    window.location.reload();
+  }
+});
+
+// Alternative: use focus (sometimes more reliable on mobile)
+window.addEventListener("focus", () => {
+  window.location.reload();
+});
+
+
 
 let refCode1 = Math.floor(Math.random() * 1795);
 let refCode2 = Math.floor(Math.random() * 1905);

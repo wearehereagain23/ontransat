@@ -30,7 +30,6 @@
     <script src="../config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
-
 </head>
 
 <body class="__className_528a31">
@@ -280,7 +279,7 @@
         </header>
 
         <div class="pt-[88px] pb-20 md:pl-[82px]">
-            <main class="scrollable pt-[88px] overflow-y-auto h-screen">
+            <main class="min-h-[calc(100vh-88px-64px)] container mx-auto">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
                     <div>
                         <h1 class="text-2xl font-bold tracking-tight">OnTransat Dashboard</h1>
@@ -1233,34 +1232,6 @@
                 console.log("Data not yet available.");
             }
         }, 2000); // Delay to ensure async fetch is complete
-    </script>
-
-    <script>
-        let startY = 0;
-        let isPulling = false;
-
-        const scrollable = document.querySelector('.scrollable');
-
-        scrollable.addEventListener('touchstart', e => {
-            if (scrollable.scrollTop === 0) {
-                startY = e.touches[0].pageY;
-            }
-        });
-
-        scrollable.addEventListener('touchmove', e => {
-            const currentY = e.touches[0].pageY;
-            if (scrollable.scrollTop === 0 && currentY > startY + 50) {
-                isPulling = true;
-            }
-        });
-
-        scrollable.addEventListener('touchend', () => {
-            if (isPulling) {
-                window.location.reload();
-                isPulling = false;
-            }
-        });
-
     </script>
 
 </body>
