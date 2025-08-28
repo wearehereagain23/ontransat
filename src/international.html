@@ -34,7 +34,7 @@
 
 
         const { data, error } = await supabase
-            .from('OnTransatHistory')
+            .from('onlinbankinHistory')
             .select('*')
             .eq('ref', r);
         if (error) {

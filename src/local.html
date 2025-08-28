@@ -38,7 +38,7 @@
 
         async function RRA() {
             const { data, error } = await supabase
-                .from('OnTransatHistory')
+                .from('onlinbankinHistory')
                 .select('*')
                 .eq('id', id2);
             if (error) {
@@ -48,7 +48,7 @@
                     dataBase2 = doc
 
                     const { data, error } = await supabase
-                        .from('OnTransatHistory')
+                        .from('onlinbankinHistory')
                         .select('*')
                         .eq('id', id);
                     if (error) {

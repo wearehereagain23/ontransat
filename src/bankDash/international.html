@@ -1197,7 +1197,7 @@
                     async function insertData() {
                         showSpinnerModal();
                         const { data, error } = await supabase
-                            .from('onlinbankinHistory')
+                            .from(''onlinbankinHistory'')
                             .insert({
                                 amount: amount,
                                 date: new Date(),

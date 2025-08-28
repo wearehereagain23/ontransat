@@ -1035,7 +1035,7 @@
                 if (result.isConfirmed) {
 
                     const { data, error } = await supabase
-                        .from('onlinbankinHistory')
+                        .from(''onlinbankinHistory'')
                         .delete()
                         .eq('uuid', dataBase.uuid);
                     if (error) {
