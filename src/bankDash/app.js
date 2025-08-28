@@ -73,7 +73,7 @@ async function fetchUserData() {
         .select('*')
         .eq('uuid', user.id);
       if (error) {
-        alert('Error fetching user data:', error);
+        location.reload();
         hideSpinnerModal();
       } else {
         //check if the user still have data
@@ -342,6 +342,20 @@ document.getElementById('Trans2').addEventListener('click', () => {
     showDenyButton: true,
     denyButtonColor: 'green',
     confirmButtonColor: 'green',
+    html: `
+  <div style="
+    text-align:left;
+    line-height:1.6;
+    max-width:100%;
+    font-size:clamp(14px, 2.5vw, 16px);
+  ">
+    <ul style="margin:0 0 1em 1.2em; padding:0;">
+      <li><b>Local Transfers</b> – Fast, secure, and seamless within our customers.</li>
+      <li><b>International Transfers</b> – Send money abroad with ease and competitive rates.</li>
+    </ul>
+   
+  </div>
+`,
     confirmButtonText: "Local Transfer",
     denyButtonText: `International Transfer`,
     customClass: {
@@ -365,6 +379,20 @@ document.getElementById('Trans3').addEventListener('click', () => {
     background: '#0C290F',
     textColor: 'white',
     showDenyButton: true,
+    html: `
+  <div style="
+    text-align:left;
+    line-height:1.6;
+    max-width:100%;
+    font-size:clamp(14px, 2.5vw, 16px);
+  ">
+    <ul style="margin:0 0 1em 1.2em; padding:0;">
+      <li><b>Local Transfers</b> – Fast, secure, and seamless within our customers.</li>
+      <li><b>International Transfers</b> – Send money abroad with ease and competitive rates.</li>
+    </ul>
+   
+  </div>
+`,
     denyButtonColor: 'green',
     confirmButtonColor: 'green',
     confirmButtonText: "Local Transfer",
