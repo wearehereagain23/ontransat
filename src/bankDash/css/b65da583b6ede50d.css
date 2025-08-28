@@ -135,17 +135,12 @@ html {
     -webkit-tap-highlight-color: transparent
 }
 
-
-html,
 body {
-
     margin: 0;
-    overflow-y: auto;
-    /* allow scroll */
-    -webkit-overflow-scrolling: touch;
-    /* momentum scrolling on iOS */
     line-height: inherit
 }
+
+
 
 hr {
     height: 0;
@@ -5404,10 +5399,4 @@ textarea:focus {
     color: white;
     /* pink */
     font-weight: bold;
-}
-
-.main {
-    height: calc(100vh - 60px);
-    /* subtract header/footer height */
-    overflow-y: auto;
 }
