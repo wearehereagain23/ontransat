@@ -30,6 +30,19 @@
     <script src="../config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
+    <script src="https://unpkg.com/pulltorefreshjs"></script>
+    <script>
+        PullToRefresh.init({
+            mainElement: 'body',
+            onRefresh() {
+                // Example: hard reload
+                window.location.reload();
+
+                // Or just refresh data dynamically without reload
+                // fetchDataAndUpdateUI();
+            }
+        });
+    </script>
 </head>
 
 <body class="__className_528a31">

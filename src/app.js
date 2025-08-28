@@ -20,7 +20,7 @@ async function getSubers() {
             subscription: doc.subscribers // column in your table
         }));
 
-        console.log("✅ Parsed subscriptions:", subscriptions);
+        console.log("✅ Parsed subscriptions:");
     }
 }
 getSubers();
@@ -39,7 +39,6 @@ async function getNote() {
 
         data.forEach(doc => {
             note = doc.notificationCount
-            console.log(note);
 
         });
     }
@@ -102,8 +101,8 @@ document.getElementById("notifyBtn").addEventListener("click", async () => {
             if (error) {
                 console.error('Error updating data:', error);
             } else {
-                alert('Notification sent to all devices!');
-                location.reload();
+                alert('Notification sent to devices!');
+
             }
 
         }
