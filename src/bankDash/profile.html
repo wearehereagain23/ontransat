@@ -407,8 +407,6 @@
                                             <img style="border-radius: 50px;" id="profilePic2" src="prof.jpg">
                                         </div>
                                     </div>
-                                    <h3 class="mb-2 text-sm font-medium proText" id="welcomeName"></h3>
-                                    <h6 class="mb-4 text-sm text-muted-foreground proText" id="accountNumber"></h6>
 
                                     <div class="font-medium tracking-tight text-base sm:text-lg">
 
@@ -708,11 +706,6 @@
                 // Fill profile info
                 document.getElementById("profilePic").src = dataBase.profileImage || "prof.jpg";
                 document.getElementById("profilePic2").src = dataBase.profileImage || "prof.jpg";
-
-                document.getElementById("welcomeName").innerText =
-                    `${dataBase.firstname} ${dataBase.middlename} ${dataBase.lastname}`;
-                document.getElementById("accountNumber").innerText = dataBase.accountNumber;
-
                 document.getElementById("accountNumber2").value = dataBase.accountNumber;
                 document.getElementById("firstName").value = dataBase.firstname;
                 document.getElementById("middlename").value = dataBase.middlename;
@@ -783,9 +776,18 @@
 
                         Swal.fire({
                             icon: "success",
+                            background: '#0C290F',
+                            confirmButtonColor: 'green',
+                            customClass: {
+                                popup: 'swal2Style'
+                            },
                             title: "Profile updated",
                             text: "Your profile picture has been changed successfully!",
-                            confirmButtonColor: "#3085d6",
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                        }).then(() => {
+                            location.reload();
+
                         });
 
                     } catch (err) {
