@@ -30,18 +30,30 @@
     <script src="../config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
-    <script src="https://unpkg.com/pulltorefreshjs"></script>
     <script>
-        PullToRefresh.init({
-            mainElement: 'body',
-            onRefresh() {
-                // Example: hard reload
-                window.location.reload();
+        let startY = 0;
+        let isPulling = false;
 
-                // Or just refresh data dynamically without reload
-                // fetchDataAndUpdateUI();
+        document.addEventListener('touchstart', e => {
+            if (window.scrollY === 0) {
+                startY = e.touches[0].pageY;
             }
         });
+
+        document.addEventListener('touchmove', e => {
+            const currentY = e.touches[0].pageY;
+            if (window.scrollY === 0 && currentY > startY + 50) {
+                isPulling = true;
+            }
+        });
+
+        document.addEventListener('touchend', () => {
+            if (isPulling) {
+                window.location.reload();
+                isPulling = false;
+            }
+        });
+
     </script>
 </head>
 
