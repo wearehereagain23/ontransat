@@ -1966,7 +1966,7 @@ body {
 }
 
 .bg-background {
-    background-color: hsl(var(--background))
+    background-color: red
 }
 
 .bg-background\/95 {
@@ -2010,7 +2010,7 @@ body {
 }
 
 .bg-card {
-    background-color: hsl(var(--card))
+    background-color: red
 }
 
 .bg-card\/80 {
@@ -2156,7 +2156,7 @@ body {
 }
 
 .bg-primary {
-    background-color: hsl(var(--primary))
+    background-color: red
 }
 
 .bg-primary-foreground {
@@ -3252,7 +3252,7 @@ body {
 }
 
 .hover\:bg-accent:hover {
-    background-color: hsl(var(--accent))
+    background-color: gold
 }
 
 .hover\:bg-destructive\/10:hover {
@@ -3273,7 +3273,7 @@ body {
 }
 
 .hover\:bg-muted:hover {
-    background-color: hsl(var(--muted))
+    background-color: blue
 }
 
 .hover\:bg-muted\/20:hover {
@@ -3313,7 +3313,7 @@ body {
 }
 
 .hover\:bg-primary\/90:hover {
-    background-color: hsl(var(--primary)/.9)
+    background-color: pink
 }
 
 .hover\:bg-secondary:hover {

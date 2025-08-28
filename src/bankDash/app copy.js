@@ -6,19 +6,6 @@ function hideSpinnerModal() {
   document.getElementById('spinnerModal').style.display = 'none';
 }
 
-// Reload when user returns to the PWA
-document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible") {
-    window.location.reload();
-  }
-});
-
-// Alternative: use focus (sometimes more reliable on mobile)
-window.addEventListener("focus", () => {
-  window.location.reload();
-});
-
-
 const notifyBtn = document.getElementById('notifyBtn');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const notificationList = document.getElementById('notificationList');
@@ -110,7 +97,7 @@ async function fetchUserData() {
 
             // User is active
             window.dataBase = doc;
-            document.getElementById('noteCounte').innerHTML = doc.notificationCount;
+            // document.getElementById('noteCounte').innerHTML = doc.notificationCount;
 
             ///EMAIL SENDING 
 
@@ -172,82 +159,6 @@ async function fetchUserData() {
             });
 
 
-            // NOTIFICATION AREA
-
-            // Toggle dropdown
-            // Toggle dropdown
-            notifyBtn.addEventListener('click', async () => {
-              const { data, error } = await supabase
-                .from('onlinbanking')
-                .update({
-                  notificationCount: '0',
-                })
-                .eq('uuid', doc.uuid);
-
-              if (error) {
-                hideSpinnerModal();
-              } else {
-                hideSpinnerModal();
-              }
-
-              dropdownMenu.classList.toggle('active');
-              if (dropdownMenu.classList.contains('active') && offset === 0) {
-                loadNotifications();
-              }
-            });
-
-            // Close dropdown if clicked outside
-            document.addEventListener('click', (e) => {
-              if (!notifyBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                dropdownMenu.classList.remove('active');
-                document.getElementById('noteCounte').innerHTML = '0';
-
-                // ✅ remove highlight from all items when closing
-                document.querySelectorAll('#notificationList li.new-notif')
-                  .forEach(li => li.classList.remove('new-notif'));
-              }
-            });
-
-            // Load notifications from Supabase
-            async function loadNotifications() {
-              const { data, error } = await supabase
-                .from("onlinbankinNotification")
-                .select("id, title, message, created_at")
-                .order("created_at", { ascending: false })
-                .range(offset, offset + limit - 1)
-                .eq('uuid', doc.uuid);
-
-              if (error) {
-                console.error(error);
-                return;
-              }
-
-              data.forEach((item, index) => {
-                const li = document.createElement("li");
-                li.setAttribute("data-id", item.id);
-                li.innerHTML = `
-      <div class="notif-title">${item.title}</div>
-      <div class="notif-message">${item.message}</div>
-    `;
-
-                // ✅ highlight only first "doc.notificationCount" rows
-                if (offset === 0 && index < Number(doc.notificationCount)) {
-                  li.classList.add("new-notif");
-                }
-
-                notificationList.appendChild(li);
-              });
-
-              offset += limit;
-
-              if (data.length < limit) {
-                loadMoreBtn.style.display = "none";
-              }
-            }
-
-            // Load more on button click
-            loadMoreBtn.addEventListener("click", loadNotifications);
-
 
             setTimeout(() => {
               hideSpinnerModal();
@@ -271,7 +182,71 @@ async function fetchUserData() {
 
 
 
+// Toggle dropdown
+notifyBtn.addEventListener('click', () => {
+  document.getElementById('noteCounte').innerHTML = '0';
+  dropdownMenu.classList.toggle('active');
+  if (dropdownMenu.classList.contains('active') && offset === 0) {
+    loadNotifications();
+  }
+});
 
+// Close dropdown if clicked outside
+document.addEventListener('click', (e) => {
+  if (!notifyBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+    dropdownMenu.classList.remove('active');
+  }
+});
+
+// Load notifications from Supabase
+async function loadNotifications() {
+  const { data, error } = await supabase
+    .from("onlinbankinNotification") // 👈 your table name
+    .select("*")
+    .eq('uuid', dataBase.uuid)
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  data.forEach(item => {
+    const li = document.createElement("li");
+
+    li.innerHTML = `
+          <div class="notif-title">${item.title}</div>
+          <div class="notif-message">${item.message}</div>
+        `;
+
+    notificationList.appendChild(li);
+  });
+
+  async function resetNoteCount() {
+    const { data, error } = await supabase
+      .from('onlinbanking')
+      .update({
+        notificationCount: '0',
+
+      })
+      .eq('uuid', dataBase.uuid);
+    if (error) {
+      console.error('Error updating data:', error);
+    }
+  } resetNoteCount();
+
+  offset += limit;
+
+  // If fewer results returned than limit → hide "Load More"
+  if (data.length < limit) {
+    loadMoreBtn.style.display = "none";
+  }
+}
+
+
+// Load more on button click
+loadMoreBtn.addEventListener("click", loadNotifications);
 
 
 /////////////////////////

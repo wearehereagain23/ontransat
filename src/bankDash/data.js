@@ -17,5 +17,6 @@ async function fetchFromSupabase() {
 // Call it immediately
 fetchFromSupabase();
 
-
-let
+  
+let 
+     
